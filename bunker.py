@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import sys
+import os
+
 
 bunker = {
        'room01':
@@ -167,9 +169,8 @@ bunker = {
             }
 }
 
-# you_are_here2 = bunker.get('floor1').get('room06')
-
 you_are_here = bunker['room01']
+histeria = 0
 
 # print(
 # you_are_here.get('name'), "\n\n",
@@ -179,57 +180,40 @@ you_are_here = bunker['room01']
 
 def gogogo():
     global you_are_here
+    global histeria
+
+    if histeria >= 2:
+        print('Прекратите истерику! Успокаиваясь, вы пропускаете ход.')
+        histeria -= 1
+        return
+
+
+
+
     you_was_here = you_are_here.get('name')
 
     if you_are_here.get('goto')[cmd] != 'noway':
-        print(you_are_here.get('name'))
-        # print("Вы перешли в " + you_are_here.get('goto').get(cmd) + "...")
-
         you_are_here = bunker[you_are_here.get('goto')[cmd]]
-
-        print("Вы перешли из " + you_was_here.lower().replace('та','ты') + " в " + you_are_here.get('name').lower().replace('та','ту') + "...")
-
-        # you_are_here = you_are_here.get('goto').get(cmd)
-        # print(you_are_here )
-
-
-        # Хотелось бы избаавиться от этого громоздкого фрагмента с проверкой current_floor.
-        # if you_are_here == 'room06':
-        #     current_floor = floor1
-        #     print('Вы переместились на лифте на этаж 1')
-        # if you_are_here == 'room15':
-        #     current_floor = floor2
-        #     print('Вы переместились на лифте на этаж 2')
-        # if you_are_here == 'room24':
-        #     current_floor = floor3
-        #     print('Вы переместились на лифте на этаж 3')
+        if cmd == 'u':
+            moving = 'Вы поднялись на лифте из '
+        elif cmd == 'd':
+            moving = 'Вы спустились на лифте из '
+        else:
+            moving = 'Вы перешли из '
+        print(moving + you_was_here.lower().replace('та','ты') + " в " + you_are_here.get('name').lower().replace('та','ту') + "...")
 
     else:
-        print( str(you_are_here.get('goto').get(cmd)) + '. Сюда хода нет!')
+        if cmd == 'u':
+            moving = 'Вы уже находитесь на самом верхнем этаже. '
+            histeria +=1
+        elif cmd == 'd':
+            moving = 'Вы уже на самом нижнем этаже, ниже некуда.'
+            histeria += 1
+        else:
+            moving = 'Вы безуспешно пытаетесь пробить лбом внешнюю стену.'
+            histeria += 1
+        print( moving )
 
-
-# def go_up():
-#     global you_are_here
-#     global current_floor
-#
-#
-#     if you_are_here['goto'][cmd] != 'noway':
-#         you_are_here = current_floor[you_are_here['goto'][cmd]]
-#
-#
-#         # else:
-#         #     print('В этой комнате нет хода на другой этаж!')
-#
-#
-#     # print(you_are_here['goto'][cmd])
-#     # переходы по этажам лабиринта, там, где это будет возможно.
-#     # print("Вы пошли наверх...")
-#
-#
-# def go_down():
-#     pass
-#     # переходы по этажам лабиринта, там, где это будет возможно.
-#     # print("Вы пошли вниз...")
 
 
 def look():
@@ -242,7 +226,7 @@ def look():
 
 def map():
     print('''ПЛАН БУНКЕРА:
-         Этаж 1            Этаж 2            Этаж 3
+         Этаж -3            Этаж -2            Этаж -1
     ┌────┬────┬────┐  ┌────┬────┬────┐  ┌────┬────┬────┐    
     │ 01 │ 02 │ 03 │  │ 10 │ 11 │ 12 │  │ 19 │ 20 │ 21 │      N     
     ├────┼────┼────┤  ├────┼────┼────┤  ├────┼────┼────┤      │     
@@ -250,12 +234,20 @@ def map():
     ├────┼────┼────┤  ├────┼────┼────┤  ├────┼────┼────┤      │     
     │ 07 │ 08 │ 09 │  │ 16 │ 17 │ 18 │  │ 25 │ 26 │ 27 │      S     
     └────┴────┴────┘  └────┴────┴────┘  └────┴────┴────┘''')
+    print('Вы сейчас здесь: ' + str(you_are_here.get('name')) +
+    '. Уровень вашей истерики: ' + str(histeria) + '\n')
 
 
 
 
 def take():
     pass
+
+def clearscr():
+    try:
+        os.system('clear')
+    except:
+        os.system('cls')
 
 
 def hlp():
@@ -268,8 +260,11 @@ w - идти на восток
 
 u - подняться наверх
 d - спуститься вниз
+
 l - осмотреться
 t - взять предмет
+
+с - очистить экран
 h - эта справка
 q - покинуть игру
     ''')
@@ -281,6 +276,7 @@ def game_exit():
 
 
 def gamestep():
+
     print('... Ходит игра ...')
     # тут должен рыскать монстр
 
@@ -307,6 +303,7 @@ actions = {
     'm': map,
 
     't': take,
+    'c': clearscr,
     'h': hlp,
     'q': game_exit
     }
@@ -329,4 +326,5 @@ if __name__== '__main__':
         else:
             print('\nНеизвестная команда.')
         gamestep()
+
 

@@ -175,28 +175,29 @@ bunker = {
     }
 }
 
+# you_are_here2 = bunker.get('floor1').get('room06')
+
+you_are_here = bunker['floor1']['room06']
 
 
-# получить список room 01 - 09
-# print(list(floor2.keys()))
+# print(
+# you_are_here2 is you_are_here
 
-
-current_room = 'room06'
-you_are_here = bunker['floor1'][current_room]
-
-
-# print(bunker['floor1']['room06'])
-# exit()
-
+# you_are_here.get('name')
+# bunker.get('floor1').get('room01'),"\n\n",
+# bunker.get('floor1').get('room01').get('goto', 'no!')
+)
 
 def gogogo():
     global you_are_here
     global current_room
 
-    if you_are_here['goto'][cmd] != 'noway':
-        print("Вы перешли в " + you_are_here['goto'][cmd] + "...")
+    if you_are_here.get('goto')[cmd] != 'noway':
+        print("Вы перешли в " + you_are_here.get('goto').get('n', 'noway') + "...")
 
-        you_are_here = bunker['floor1'][current_room]['goto'][cmd]
+        you_are_here = bunker['floor1']['room06']
+        you_are_here = you_are_here.get('goto').get(cmd)
+        print(you_are_here )
 
 
         # Хотелось бы избаавиться от этого громоздкого фрагмента с проверкой current_floor.
@@ -211,7 +212,7 @@ def gogogo():
         #     print('Вы переместились на лифте на этаж 3')
 
     else:
-        print( str(you_are_here['goto'][cmd]) + '. Сюда хода нет!')
+        print( str(you_are_here.get('goto').get(cmd)) + '. Сюда хода нет!')
 
 
 # def go_up():
@@ -240,8 +241,8 @@ def gogogo():
 
 def look():
     global you_are_here
-    print('Вы находитесь в ' + you_are_here['name'] + '.')
-    print(you_are_here['desc'])
+    print('Вы находитесь в ' + you_are_here.get('name') + '.')
+    print(you_are_here.get('desc'))
 
 
 
@@ -249,12 +250,12 @@ def look():
 def map():
     print('''ПЛАН БУНКЕРА:
          Этаж 1            Этаж 2            Этаж 3
-    ┌────┬────┬────┐  ┌────┬────┬────┐  ┌────┬────┬────┐    
-    │ 01 │ 02 │ 03 │  │ 10 │ 11 │ 12 │  │ 19 │ 20 │ 21 │      N     
-    ├────┼────┼────┤  ├────┼────┼────┤  ├────┼────┼────┤      │     
-    │ 04 │ 05 │ 06 │  │ 13 │ 14 │ 15 │  │ 22 │ 23 │ 24 │   W ─┼─ E  
-    ├────┼────┼────┤  ├────┼────┼────┤  ├────┼────┼────┤      │     
-    │ 07 │ 08 │ 09 │  │ 16 │ 17 │ 18 │  │ 25 │ 26 │ 27 │      S     
+    ┌────┬────┬────┐  ┌────┬────┬────┐  ┌────┬────┬────┐
+    │ 01 │ 02 │ 03 │  │ 10 │ 11 │ 12 │  │ 19 │ 20 │ 21 │      N
+    ├────┼────┼────┤  ├────┼────┼────┤  ├────┼────┼────┤      │
+    │ 04 │ 05 │ 06 │  │ 13 │ 14 │ 15 │  │ 22 │ 23 │ 24 │   W ─┼─ E
+    ├────┼────┼────┤  ├────┼────┼────┤  ├────┼────┼────┤      │
+    │ 07 │ 08 │ 09 │  │ 16 │ 17 │ 18 │  │ 25 │ 26 │ 27 │      S
     └────┴────┴────┘  └────┴────┴────┘  └────┴────┴────┘''')
 
 
@@ -332,3 +333,4 @@ if __name__== '__main__':
         else:
             print('\nНеизвестная команда.')
         gamestep()
+
